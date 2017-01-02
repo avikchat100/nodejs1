@@ -1,15 +1,28 @@
-var http = require("http");
+var restify = require('restify');
+var builder = require('botbuilder');
 
-http.createServer(function (request, response) {
+//=========================================================
+// Bot Setup
+//=========================================================
 
-   // Send the HTTP header
-   // HTTP Status: 200 : OK
-   // Content Type: text/plain
-   response.writeHead(200, {'Content-Type': 'text/plain'});
+// Setup Restify Server
+var server = restify.createServer();
+server.listen(process.env.port || process.env.PORT || 443, function () {
+   console.log('%s listening to %s', server.name, server.url);
+});
 
-   // Send the response body as "Hello World"
-   response.end('Hello World\n');
-}).listen(443);
+// Create chat bot
+var connector = new builder.ChatConnector({
+    appId:'aff13a56-2975-4e9b-aaf1-d433f81cd5b5',
+    appPassword: 'Pze4RsyOrX9kTWUd38xrFAS'
+});
+var bot = new builder.UniversalBot(connector);
+server.post('/api/messages', connector.listen());
 
-// Console will print the message
-//console.log('Server running at http://127.0.0.1:8081/');
+//=========================================================
+// Bots Dialogs
+//=========================================================
+
+bot.dialog('/', function (session) {
+    session.send("Hello World1111");
+});
